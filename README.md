@@ -1,2 +1,2 @@
-# sandoo
-UI tests for Sandoo project
+# sendoo
+UI tests for Sendoo project
