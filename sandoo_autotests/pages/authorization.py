@@ -7,7 +7,7 @@ from pages.base_page import BasePage
 
 class AuthorizationModal(BasePage):
     def loaded_modal(self):
-        self.driver.get("http://18.195.233.16:35622/")
+        self.driver.get("")
         login_button = self.driver.find_element_by_link_text("LOGGA IN")
         login_button.click()
 
