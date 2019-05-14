@@ -10,8 +10,8 @@ class MyTestCase(unittest.TestCase):
     def setUp(self):
         authorization = AuthorizationModal(BasePage.web_driver)
         authorization.loaded_modal()
-        authorization.fill_email_field("testerwom@gmail.com")
-        authorization.fill_password_field("qwertyBasya1")
+        authorization.fill_email_field("")
+        authorization.fill_password_field("")
         authorization.click_submit_button()
         time.sleep(5)
         assert authorization.success_authorization()
