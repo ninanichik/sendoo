@@ -6,7 +6,7 @@ from pages.base_page import BasePage
 
 class SkickaPage(BasePage):
     def loaded_skicka(self):
-        self.driver.get("http://18.195.233.16:35622/package/create")
+        self.driver.get("")
 
     def fill_vad_skicka(self,  what_sand: str):
         what_sand_field = self.driver.find_element_by_xpath("/html/body/div[1]/div/main/div[1]/div[2]/div[1]/div[1]/div[2]/div/div/div[1]/div[2]/div/input")
