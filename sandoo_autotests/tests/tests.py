@@ -1,35 +1,46 @@
 from selenium import webdriver
-import time
 import unittest
-from pages.skicka import SkickaPage
-from pages.authorization import AuthorizationModal
-from pages.base_page import BasePage
+from pages.skicka import SkickaProcess, CreatedSkicka, CreatedSkickaAuthorizedUser
+from pages.authorization import AuthorizationModal, AuthorizationProcess, SuccessfulAuthorizationPage
+from pages.registration import RegistrationProcess, RegistrationIsPassed
+from pages.random_email import EmailsGeneration
+from credentials import credentials
 
 
 class MyTestCase(unittest.TestCase):
-    def setUp(self):
-        authorization = AuthorizationModal(BasePage.web_driver)
-        authorization.loaded_modal()
-        authorization.fill_email_field("")
-        authorization.fill_password_field("")
+    def test_authorization(self):
+        driver = webdriver.Chrome()
+        authorization = AuthorizationProcess(driver)
+        authorization.open(driver)
+        authorization.fill_authorization_form(credentials.email, credentials.password)
         authorization.click_submit_button()
-        time.sleep(5)
-        assert authorization.success_authorization()
+        assert SuccessfulAuthorizationPage(driver).loaded()
+
+    def test_registration(self):
+        driver = webdriver.Chrome()
+        registration = RegistrationProcess(driver)
+        email = EmailsGeneration().creating_full_email()
+        password = EmailsGeneration().creating_random_password()
+        registration.open(driver)
+        registration.fill_registration_form("name", "surname", email, password, password)
+        registration.click_on_submit_button()
+        registration.confirm_email_skickat_modal()
+        registration.click_on_logga_in()
+        assert RegistrationIsPassed(driver).loaded()
 
     def test_create_skicka(self):
-        skicka = SkickaPage(BasePage.web_driver)
-        skicka.loaded_skicka()
-        skicka.fill_vad_skicka("soffa11")
-        skicka.fill_fran_field("Stockholm")
-        skicka.fill_till_field("Malmö")
-        skicka.click_on_button_transports_type("div.transport-block:nth-child(2)")
-        skicka.select_specifik_tid()
-        skicka.input_comment("Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-        skicka.click_on_loading_type_button("div.skicka-lists-container:nth-child(1) > div:nth-child(2) > div:nth-child(2)")
-        skicka.click_on_unloading_type_button("div.skicka-lists-container:nth-child(2) > div:nth-child(2) > div:nth-child(3)")
+        driver = webdriver.Chrome()
+        skicka = SkickaProcess(driver)
+        skicka.open(driver)
+        skicka.fill_skicka_form("soffa",
+                                "Malmö",
+                                "Stockholm",
+                                "div.transport-block:nth-child(2)",
+                                "Lorem ipsum dolor sit amet.",
+                                "div.skicka-lists-container:nth-child(1) > div:nth-child(2) > div:nth-child(2)",
+                                "div.skicka-lists-container:nth-child(2) > div:nth-child(2) > div:nth-child(3)")
         skicka.click_on_publicera_uppdrag_button()
-        assert skicka.finished_skicka_process()
-
+        assert CreatedSkicka(driver).loaded()
 
 
 if __name__ == "__main__":

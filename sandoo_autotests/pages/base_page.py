@@ -1,11 +1,11 @@
-from selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait
+from abc import ABC, abstractmethod
 
 
-class BasePage(object):
-    web_driver = webdriver.Chrome()
+class BasePage(ABC):
+    @abstractmethod
+    def open(self, driver) -> None:
+        pass
 
-    def __init__(self, driver):
-        self.driver = driver
-        self.wait = WebDriverWait(self.driver, 10)
-        # self.driver.implicitly_wait(10)
+    @abstractmethod
+    def loaded(self) -> bool:
+        pass
